@@ -17,6 +17,7 @@ const CONFIG = {
 };
 
 let isEnabled = false;
+let themeApplied = false;
 
 function setRootDarkAttributes(enable) {
   const html = document.documentElement;
@@ -46,6 +47,56 @@ function applyInlineOverrides(enable) {
   }
 }
 
+function extractRGB(colorString) {
+  if (!colorString) return null;
+  const rgbMatch = colorString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+  if (rgbMatch) {
+    return {
+      r: Number(rgbMatch[1]),
+      g: Number(rgbMatch[2]),
+      b: Number(rgbMatch[3])
+    };
+  }
+  const hexMatch = colorString.trim().match(/^#([0-9a-f]{6})$/i);
+  if (hexMatch) {
+    const intVal = parseInt(hexMatch[1], 16);
+    return {
+      r: (intVal >> 16) & 255,
+      g: (intVal >> 8) & 255,
+      b: intVal & 255
+    };
+  }
+  return null;
+}
+
+function relativeLuminance({ r, g, b }) {
+  const normalize = (channel) => {
+    const value = channel / 255;
+    return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+  };
+
+  const [R, G, B] = [normalize(r), normalize(g), normalize(b)];
+  return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+}
+
+function resolveBackgroundColor(element, depth = 0) {
+  if (!element || depth > 5) return null;
+  const computed = window.getComputedStyle(element);
+  const color = computed.backgroundColor;
+  if (!color || color === "rgba(0, 0, 0, 0)" || color === "transparent") {
+    return resolveBackgroundColor(element.parentElement, depth + 1);
+  }
+  return color;
+}
+
+function pageLooksLight() {
+  const target = document.body || document.documentElement;
+  const color = resolveBackgroundColor(target) || "rgb(255, 255, 255)";
+  const rgb = extractRGB(color) || { r: 255, g: 255, b: 255 };
+  const luminance = relativeLuminance(rgb);
+  return luminance >= 0.35;
+}
+
 async function loadInitialState() {
   try {
     const result = await chrome.storage.sync.get([STORAGE_KEY]);
@@ -60,33 +111,51 @@ async function loadInitialState() {
 }
 
 function enableDarkMode() {
+  const pageWasLight = pageLooksLight();
   isEnabled = true;
+  if (!pageWasLight) {
+    themeApplied = false;
+    setRootDarkAttributes(false);
+    applyInlineOverrides(false);
+    return { applied: false, pageWasLight };
+  }
+
+  themeApplied = true;
   setRootDarkAttributes(true);
   applyInlineOverrides(true);
+  return { applied: true, pageWasLight };
 }
 
 function disableDarkMode() {
   isEnabled = false;
+  themeApplied = false;
   setRootDarkAttributes(false);
   applyInlineOverrides(false);
 }
 
 function toggleDarkMode() {
+  let pageWasLight = pageLooksLight();
   if (isEnabled) {
     disableDarkMode();
   } else {
-    enableDarkMode();
+    const { pageWasLight: detectedLight } = enableDarkMode();
+    pageWasLight = detectedLight;
   }
 
   chrome.storage.sync.set({ [STORAGE_KEY]: isEnabled }).catch(() => {});
+  return { enabled: isEnabled, pageWasLight, themeApplied };
 }
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "DDM_TOGGLE") {
-    toggleDarkMode();
-    sendResponse({ enabled: isEnabled });
+    const result = toggleDarkMode();
+    sendResponse({
+      enabled: result.enabled,
+      pageWasLight: result.pageWasLight,
+      themeApplied: result.themeApplied
+    });
   } else if (message?.type === "DDM_GET_STATE") {
-    sendResponse({ enabled: isEnabled });
+    sendResponse({ enabled: isEnabled, themeApplied, pageIsLight: pageLooksLight() });
   }
 });
 
