@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Dark Mode Reader",
+  "description": "A high-quality dark mode for any website with smart color inversion and fine-tuned readability.",
+  "version": "1.0.0",
+  "permissions": ["scripting", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_title": "Toggle Dark Mode Reader",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "css": ["dark-theme.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "options_page": "options.html"
+}
+
+

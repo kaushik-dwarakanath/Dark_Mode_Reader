@@ -1,0 +1,71 @@
+/* Dark Mode Reader - palette-aware inversion */
+
+html.deep-dark-mode-root {
+  color-scheme: dark;
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.deep-dark-mode-root body {
+  transition: color 160ms ease-out, background-color 160ms ease-out;
+}
+
+/* Preserve imagery, logos, and watermarks exactly as authored */
+html.deep-dark-mode-root :where(
+    img,
+    picture,
+    video,
+    canvas,
+    svg,
+    iframe,
+    object,
+    embed,
+    [role="img"],
+    .no-dark-filter
+  ) {
+  filter: invert(1) hue-rotate(180deg) !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Maintain crisp text + strong button contrast */
+html.deep-dark-mode-root :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span,
+    li,
+    label,
+    button,
+    [role="button"],
+    a,
+    input,
+    select,
+    textarea,
+    .btn
+  ) {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+html.deep-dark-mode-root :where(button, [role="button"], .btn, input[type="submit"], input[type="button"]) {
+  border-radius: 9999px;
+  border: 1px solid rgba(100, 116, 139, 0.6);
+  padding: 0.35em 1.25em;
+  font-weight: 600;
+}
+
+/* Ensure borders + separators stay visible */
+html.deep-dark-mode-root hr,
+html.deep-dark-mode-root :where(table, th, td, tr),
+html.deep-dark-mode-root :where(input, textarea, select) {
+  border-color: rgba(148, 163, 184, 0.4) !important;
+}
+
+/* Utility: developers can opt elements out of inversion */
+.no-dark-filter {
+  isolation: isolate;
+}
+
+

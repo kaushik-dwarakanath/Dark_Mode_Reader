@@ -1,0 +1,133 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  color: #e5e7eb;
+}
+
+.popup-root {
+  width: 280px;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #f97316, #ec4899, #22d3ee);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
+}
+
+.title-block h1 {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+
+.title-block p {
+  margin: 1px 0 0;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.toggle-row {
+  margin-top: 4px;
+  padding: 10px 10px 10px 11px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+.status-pill {
+  padding: 2px 9px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  font-size: 11px;
+}
+
+.status-pill.on {
+  background: rgba(22, 163, 74, 0.18);
+  border-color: rgba(22, 163, 74, 0.7);
+  color: #bbf7d0;
+}
+
+.hint {
+  text-align: right;
+}
+
+/* Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  background-color: #111827;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.7);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 2px;
+  background: radial-gradient(circle at 30% 20%, #f9fafb, #e5e7eb);
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  border-radius: 50%;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
+}
+
+input:checked + .slider {
+  background: radial-gradient(circle at 0% 0%, #22c55e, #16a34a);
+  box-shadow: 0 0 18px rgba(22, 163, 74, 0.4);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+}
+
+

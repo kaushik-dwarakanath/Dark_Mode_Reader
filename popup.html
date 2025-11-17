@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dark Mode Reader</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup-root">
+      <header class="popup-header">
+        <div class="logo-dot"></div>
+        <div class="title-block">
+          <h1>Dark Mode Reader</h1>
+          <p>Apple-level dark mode for the web.</p>
+        </div>
+      </header>
+
+      <section class="toggle-row">
+        <span>Enable on this site</span>
+        <label class="switch">
+          <input id="toggle" type="checkbox" />
+          <span class="slider"></span>
+        </label>
+      </section>
+
+      <footer class="popup-footer">
+        <span class="status-pill" id="status-pill">Off</span>
+        <span class="hint">Changes apply instantly to this tab.</span>
+      </footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
+
+
