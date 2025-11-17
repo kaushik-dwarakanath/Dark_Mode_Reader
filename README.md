@@ -13,5 +13,5 @@ This is a polished dark-mode Chrome extension that converts almost any website i
 
 1. Run Chrome and go to `chrome://extensions/`.
 2. Turn on **Developer mode** (top-right).
-3. Click **Load unpacked** and select this `dark_mode_project` folder.
+3. Click **Load unpacked** and select this `Dark_Mode_Reader` folder.
 4. Open any website and use the extension icon to toggle dark mode.
