@@ -4,7 +4,7 @@ This is a polished dark-mode Chrome extension that converts almost any website i
 
 ## Features
 
-- Smart, global dark theme applied via CSS (no heavy DOM rewrites).
+- Smart, global dark theme applied via CSS.
 - Popup UI with a smooth toggle for the current tab.
 - Per-user enablement state persisted with `chrome.storage.sync`.
 - Minimal, performance-focused content script.
